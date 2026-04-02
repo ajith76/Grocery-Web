@@ -1,0 +1,80 @@
+<!-- Side Nav - Grocery Categories -->
+<div class="side-nav-backdrop" [class.visible]="isOpen()" (click)="onClose()"></div>
+
+<aside class="side-nav" [class.open]="isOpen()" id="side-nav">
+  <!-- Header -->
+  <div class="side-nav-header">
+    <div class="header-top">
+      <div class="header-brand">
+        <span class="brand-emoji">🛒</span>
+        <h2 class="side-nav-title">{{ title() }}</h2>
+      </div>
+      <button class="close-btn" (click)="onClose()" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <p class="header-subtitle">{{ totalProducts() }} products available</p>
+
+    <!-- Search -->
+    <div class="nav-search">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text"
+        placeholder="Search categories..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="onSearchChange($event)"
+        class="search-input" />
+    </div>
+  </div>
+
+  <!-- Category List -->
+  <nav class="category-list" id="category-list">
+    @for (category of filteredCategories(); track category.id; let i = $index) {
+    <button class="category-item"
+      [class.active]="activeFilter() === category.name"
+      [style.--delay]="(i * 40) + 'ms'"
+      [style.--accent]="category.color || '#1a4d45'"
+      [id]="'category-' + category.id"
+      (click)="selectCategory(category)">
+      <div class="category-icon-wrap" [style.background]="(category.color || '#1a4d45') + '15'">
+        <span class="category-icon">{{ category.icon }}</span>
+      </div>
+      <div class="category-info">
+        <span class="category-name">{{ category.name }}</span>
+        @if (category.itemCount !== undefined) {
+        <span class="category-count">{{ category.itemCount }} items</span>
+        }
+      </div>
+      <div class="category-badge" [style.background]="(category.color || '#1a4d45') + '18'"
+        [style.color]="category.color || '#1a4d45'">
+        {{ category.itemCount }}
+      </div>
+    </button>
+    }
+
+    @if (filteredCategories().length === 0) {
+    <div class="no-results">
+      <span>🔍</span>
+      <p>No categories found</p>
+    </div>
+    }
+  </nav>
+
+  <!-- Footer Promo -->
+  <div class="side-nav-footer">
+    <div class="promo-card">
+      <div class="promo-icon">🎉</div>
+      <div class="promo-text">
+        <span class="promo-title">Special Offer!</span>
+        <span class="promo-desc">Get 20% off your first order</span>
+      </div>
+    </div>
+  </div>
+</aside>

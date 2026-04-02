@@ -1,0 +1,67 @@
+<header class="gro-header" id="gro-header">
+  <div class="header-inner">
+
+    <!-- Left: Hamburger + Logo -->
+    <div class="header-left">
+      <button class="menu-btn" id="menu-toggle-btn" (click)="onMenuToggle()" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+      <a class="logo" id="header-logo" [routerLink]="logoRoute()">
+        <div class="logo-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+        </div>
+        <span class="logo-text">{{ brandName() }}</span>
+      </a>
+    </div>
+
+    <!-- Center: Search Bar -->
+    <div class="header-center">
+      <div class="search-bar" id="header-search">
+        <input type="text" class="search-input" [placeholder]="searchPlaceholder()"
+          [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (keyup.enter)="onSearch()" />
+        <button class="search-btn" (click)="onSearch()" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Promo + Cart + Avatar -->
+    <div class="header-right">
+      @if (promo()) {
+      <div class="promo-text" id="header-promo">
+        <span class="promo-icon">{{ promo()!.icon }}</span>
+        <span>{{ promo()!.message }} <strong>{{ promo()!.highlight }}</strong></span>
+      </div>
+      }
+      <button class="cart-btn" id="header-cart-btn" (click)="onCartClick()" aria-label="Shopping cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+        @if (cartCount() > 0) {
+        <span class="cart-badge">{{ cartCount() }}</span>
+        }
+      </button>
+      <div class="user-avatar" id="header-avatar" (click)="onAvatarClick()">
+        <img [src]="avatarUrl()" [alt]="user().name + ' avatar'" />
+      </div>
+    </div>
+
+  </div>
+</header>

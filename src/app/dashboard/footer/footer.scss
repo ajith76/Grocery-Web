@@ -1,0 +1,243 @@
+/* ========================================
+   Footer — Gromuse Grocery
+   ======================================== */
+
+$footer-bg: #0f332d;
+$footer-dark: #0a2420;
+$accent: #1a4d45;
+$green-light: #2dd4a8;
+$text-white: #ffffff;
+$text-light: rgba(255, 255, 255, 0.78);
+$text-muted: rgba(255, 255, 255, 0.45);
+$border: rgba(255, 255, 255, 0.08);
+$transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+.gro-footer {
+  background: linear-gradient(180deg, $footer-bg 0%, $footer-dark 100%);
+  margin-top: auto;
+}
+
+/* ---------- Main Footer ---------- */
+.footer-main {
+  padding: 48px 0 32px;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ---------- Brand Column ---------- */
+.brand-col {
+  padding-right: 20px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.footer-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: $green-light;
+}
+
+.footer-brand-name {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.3px;
+}
+
+.footer-quote {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: $text-light;
+  font-style: italic;
+  margin: 0 0 20px;
+  position: relative;
+  padding-left: 14px;
+  border-left: 2px solid $green-light;
+}
+
+/* ---------- Social Links ---------- */
+.social-links {
+  display: flex;
+  gap: 10px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: $text-light;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background $transition, color $transition, transform $transition;
+
+  &:hover {
+    background: $green-light;
+    color: $footer-dark;
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- Column Titles ---------- */
+.footer-col-title {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: $text-white;
+  margin: 0 0 18px;
+  letter-spacing: -0.1px;
+  position: relative;
+  padding-bottom: 10px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: $green-light;
+    border-radius: 2px;
+  }
+}
+
+/* ---------- Footer Links ---------- */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  li a {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 0.84rem;
+    color: $text-light;
+    text-decoration: none;
+    transition: color $transition, padding-left $transition;
+    display: inline-block;
+
+    &:hover {
+      color: $green-light;
+      padding-left: 6px;
+    }
+  }
+}
+
+/* ---------- Contact Info ---------- */
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    span {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 0.84rem;
+      color: $text-light;
+      line-height: 1.5;
+    }
+  }
+}
+
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: $green-light;
+  flex-shrink: 0;
+}
+
+/* ---------- Bottom Bar ---------- */
+.footer-bottom {
+  border-top: 1px solid $border;
+  padding: 18px 0;
+}
+
+.footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.copyright {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  color: $text-muted;
+  margin: 0;
+}
+
+.tagline {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  color: $text-muted;
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 0 20px;
+  }
+
+  .footer-main {
+    padding: 36px 0 24px;
+  }
+
+  .brand-col {
+    padding-right: 0;
+  }
+
+  .footer-bottom-inner {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    padding: 0 20px;
+  }
+}

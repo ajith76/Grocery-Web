@@ -1,0 +1,106 @@
+/* Grocery Shopping App - Dashboard Styles */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.dashboard-body {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+}
+
+.dashboard-content {
+  flex: 1;
+  min-width: 0;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 28px;
+  width: 100%;
+}
+
+/* ---------- Filter Chip Bar ---------- */
+.filter-chip-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 12px 18px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  animation: chipSlideIn 0.3s ease-out;
+}
+
+.filter-label {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #e8f5f0;
+  color: #1a4d45;
+  border-radius: 50px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.chip-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: rgba(26, 77, 69, 0.15);
+  border-radius: 50%;
+  color: #1a4d45;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(26, 77, 69, 0.3);
+  }
+}
+
+.clear-all-btn {
+  margin-left: auto;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #374151;
+  }
+}
+
+@keyframes chipSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

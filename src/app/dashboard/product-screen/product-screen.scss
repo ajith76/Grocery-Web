@@ -1,0 +1,345 @@
+/* ========================================
+   Product Screen — Gromuse Grocery
+   ======================================== */
+
+$accent: #1a4d45;
+$accent-light: #e8f5f0;
+$accent-hover: #15403a;
+$text-primary: #1a1a2e;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border: #f0f0f0;
+$card-bg: #ffffff;
+$transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+/* ---------- Section Header ---------- */
+.product-section {
+  margin-top: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.section-title {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.product-count {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: $text-muted;
+  background: #f3f4f6;
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+
+/* ---------- Empty State ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 12px;
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  p {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+.see-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: $accent;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color $transition-fast, gap $transition-fast;
+  border-radius: 8px;
+
+  svg {
+    transition: transform $transition-fast;
+  }
+
+  &:hover {
+    color: $accent-hover;
+    background: $accent-light;
+    gap: 10px;
+  }
+}
+
+/* ---------- Product Grid ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+/* ---------- Product Card ---------- */
+.product-card {
+  background: $card-bg;
+  border-radius: 14px;
+  border: 1px solid $border;
+  overflow: hidden;
+  transition: transform $transition, box-shadow $transition;
+  animation: cardFadeIn 0.4s ease-out both;
+  animation-delay: var(--delay, 0ms);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+
+    .wishlist-btn {
+      opacity: 1;
+    }
+
+    .product-placeholder-icon {
+      transform: scale(1.1);
+    }
+  }
+}
+
+/* ---------- Image Area ---------- */
+.product-image-area {
+  position: relative;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-placeholder-icon {
+  transition: transform $transition;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  background: $accent;
+  color: #fff;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  color: $text-muted;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity $transition-fast, color $transition-fast, background $transition-fast;
+  z-index: 2;
+
+  &:hover {
+    color: #ef4444;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ---------- Product Info ---------- */
+.product-info {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.product-category {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.product-name {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: $text-primary;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Pricing ---------- */
+.product-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.current-price {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: $accent;
+}
+
+.original-price {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: $text-muted;
+  text-decoration: line-through;
+}
+
+.product-weight {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  color: $text-secondary;
+  margin-left: auto;
+}
+
+/* ---------- Meta (rating + brand) ---------- */
+.product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.rating-text {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.68rem;
+  color: $text-muted;
+  margin-left: 3px;
+}
+
+.product-brand {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: $accent;
+}
+
+/* ---------- Add to Cart ---------- */
+.add-to-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  margin-top: 4px;
+  background: $accent;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background $transition-fast, transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    background: $accent-hover;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 77, 69, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Animations ---------- */
+@keyframes cardFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .product-image-area {
+    height: 120px;
+  }
+
+  .product-info {
+    padding: 10px 10px 12px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+}
