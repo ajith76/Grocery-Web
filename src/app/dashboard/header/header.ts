@@ -89,6 +89,7 @@ export class Header {
 
   onCartClick(): void {
     this.cartClick.emit();
+    window.scrollTo(0, 0);
   }
 
   onAvatarClick(): void {
@@ -97,5 +98,6 @@ export class Header {
 
   onWishlistClick(): void {
     this.wishlistClick.emit();
+    window.scrollTo(0, 0);
   }
 }

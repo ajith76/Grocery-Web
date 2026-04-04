@@ -40,6 +40,13 @@
   font-size: 0.8rem;
   color: #6b7280;
   font-weight: 500;
+  white-space: nowrap;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .filter-chip {

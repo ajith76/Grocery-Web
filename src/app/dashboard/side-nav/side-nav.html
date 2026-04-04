@@ -38,7 +38,7 @@
   <nav class="category-list" id="category-list">
     @for (category of filteredCategories(); track category.id; let i = $index) {
     <button class="category-item"
-      [class.active]="activeFilter() === category.name"
+      [class.active]="activeFilters().includes(category.name)"
       [style.--delay]="(i * 40) + 'ms'"
       [style.--accent]="category.color || '#1a4d45'"
       [id]="'category-' + category.id"

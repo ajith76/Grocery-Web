@@ -26,8 +26,8 @@ export interface Product {
 export class ProductScreen implements OnInit {
 
   // ── Inputs ──
-  /** Active category filter — null means show all */
-  filterCategory = input<string | null>(null);
+  /** Active category filters — empty means show all */
+  filterCategories = input<string[]>([]);
 
   /** List of wishlisted product IDs */
   wishlistIds = input<string[]>([]);
@@ -60,9 +60,9 @@ export class ProductScreen implements OnInit {
     if (this.isWishlistMode()) {
       products = products.filter(p => this.wishlistIds().includes(p.id));
     } else {
-      const filter = this.filterCategory();
-      if (filter) {
-        products = products.filter(p => p.category === filter);
+      const filters = this.filterCategories();
+      if (filters.length > 0) {
+        products = products.filter(p => filters.includes(p.category));
       }
     }
 

@@ -5,8 +5,10 @@
       <h2 class="section-title">
         @if (isWishlistMode()) {
           Wish List
-        } @else if (filterCategory()) {
-          {{ filterCategory() }}
+        } @else if (filterCategories().length === 1) {
+          {{ filterCategories()[0] }}
+        } @else if (filterCategories().length > 1) {
+          Multiple Categories
         } @else {
           Featured Product
         }

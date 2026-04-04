@@ -28,7 +28,7 @@ export class DashoardScreen {
 
   // ── Side Nav State ──
   sideNavOpen = signal(false);
-  activeFilterCategory = signal<string | null>(null);
+  activeFilterCategories = signal<string[]>([]);
 
   // ── Wishlist State ──
   wishlistIds = signal<string[]>([]);
@@ -125,15 +125,20 @@ export class DashoardScreen {
 
   // ── Side Nav Event Handlers ──
   onCategorySelect(category: CategoryItem): void {
-    // If same category clicked again, clear filter
-    if (this.activeFilterCategory() === category.name) {
-      this.activeFilterCategory.set(null);
+    const current = this.activeFilterCategories();
+    if (current.includes(category.name)) {
+      this.activeFilterCategories.set(current.filter(c => c !== category.name));
     } else {
-      this.activeFilterCategory.set(category.name);
+      this.activeFilterCategories.set([...current, category.name]);
     }
     this.showingWishlist.set(false);
     this.showingCart.set(false);
     this.sideNavOpen.set(false);
+  }
+
+  removeCategoryFilter(categoryName: string): void {
+    const current = this.activeFilterCategories();
+    this.activeFilterCategories.set(current.filter(c => c !== categoryName));
   }
 
   onSideNavClose(): void {
@@ -141,7 +146,7 @@ export class DashoardScreen {
   }
 
   clearFilter(): void {
-    this.activeFilterCategory.set(null);
+    this.activeFilterCategories.set([]);
     this.showingWishlist.set(false);
     this.showingCart.set(false);
   }

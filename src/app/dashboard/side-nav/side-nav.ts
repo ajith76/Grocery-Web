@@ -23,7 +23,7 @@ export class SideNav {
   categories = input<CategoryItem[]>([]);
   isOpen = input<boolean>(true);
   title = input<string>('Categories');
-  activeFilter = input<string | null>(null);
+  activeFilters = input<string[]>([]);
 
   // ── Internal State ──
   searchQuery = signal('');
