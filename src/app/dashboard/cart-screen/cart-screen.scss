@@ -1,0 +1,250 @@
+$accent: #1a4d45;
+$accent-light: #e8f5f0;
+$accent-hover: #15403a;
+$text-primary: #1a1a2e;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border: #f0f0f0;
+$card-bg: #ffffff;
+$danger: #ef4444;
+$transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+.cart-section {
+  width: 100%;
+}
+
+.cart-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.cart-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cart-item-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: $card-bg;
+  border-radius: 14px;
+  border: 1px solid $border;
+  padding: 16px;
+  transition: box-shadow $transition;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.item-meta {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  color: $text-secondary;
+}
+
+.item-price {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $accent;
+  margin-top: 4px;
+}
+
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.quantity-control-group {
+  display: flex;
+  align-items: center;
+  background: $accent-light;
+  border-radius: 8px;
+  border: 1px solid rgba(26, 77, 69, 0.1);
+  height: 38px;
+}
+
+.qty-btn {
+  width: 34px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: $accent;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover:not(:disabled):not(.disabled) {
+    background: $accent;
+    color: #fff;
+  }
+
+  &:disabled, &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.qty-text {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0 12px;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: $text-muted;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: color $transition-fast, background $transition-fast;
+
+  &:hover {
+    color: $danger;
+    background: rgba(239, 68, 68, 0.1);
+  }
+}
+
+.cart-summary {
+  width: 340px;
+  background: $card-bg;
+  border-radius: 14px;
+  border: 1px solid $border;
+  padding: 24px;
+  position: sticky;
+  top: 100px;
+}
+
+.summary-title {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+  color: $text-secondary;
+  margin-bottom: 12px;
+
+  &.discount {
+    color: #10b981;
+  }
+
+  &.total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-top: 16px;
+  }
+}
+
+.summary-divider {
+  border: 0;
+  border-top: 1px dashed $border;
+  margin: 16px 0;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 24px;
+  background: $accent;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background: $accent-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(26, 77, 69, 0.2);
+  }
+}
+
+.empty-cart-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+
+  .empty-icon-wrap {
+    width: 120px;
+    height: 120px;
+    background: #f3f4f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-muted;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: $text-primary;
+  }
+
+  p {
+    margin: 0;
+    color: $text-secondary;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+  .cart-summary {
+    width: 100%;
+    position: static;
+  }
+}

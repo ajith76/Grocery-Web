@@ -3,11 +3,13 @@
   [brandName]="brandName()"
   [searchPlaceholder]="searchPlaceholder()"
   [cartCount]="cartCount()"
+  [wishlistCount]="wishlistIds().length"
   [user]="currentUser()"
   [promo]="promoConfig()"
   (menuToggle)="onMenuToggle()"
   (searchSubmit)="onSearch($event)"
   (cartClick)="onCartClick()"
+  (wishlistClick)="onHeaderWishlistClick()"
   (avatarClick)="onAvatarClick()">
 </app-header>
 
@@ -22,29 +24,66 @@
 
 <div class="dashboard-body">
   <div class="dashboard-content" id="dashboard-content">
-    <!-- Promo Banner Carousel -->
-    <app-banner [slides]="bannerSlides()" [intervalMs]="4000"></app-banner>
 
-    <!-- Active Filter Chip -->
-    @if (activeFilterCategory()) {
-    <div class="filter-chip-bar">
-      <span class="filter-label">Filtered by:</span>
-      <div class="filter-chip">
-        <span>{{ activeFilterCategory() }}</span>
-        <button class="chip-clear" (click)="clearFilter()" aria-label="Clear filter">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+    @if (showingCart()) {
+      <!-- Cart View -->
+      <div class="filter-chip-bar" style="margin-bottom: 20px;">
+        <span class="filter-label">Shopping Cart</span>
+        <button class="clear-all-btn" (click)="showingCart.set(false)">Continue Shopping</button>
       </div>
-      <button class="clear-all-btn" (click)="clearFilter()">Clear All</button>
-    </div>
+      <app-cart-screen
+        [cartItems]="cartItemsData()"
+        (cartChange)="onCartChange($event)">
+      </app-cart-screen>
+
+    } @else if (showingWishlist()) {
+      <!-- Wishlist View -->
+      <div class="filter-chip-bar">
+        <span class="filter-label">Viewing Wishlist</span>
+        <button class="clear-all-btn" (click)="showingWishlist.set(false)">Back to Products</button>
+      </div>
+      <app-product-screen
+        [filterCategory]="activeFilterCategory()"
+        [wishlistIds]="wishlistIds()"
+        [isWishlistMode]="true"
+        [searchQuery]="searchQuery()"
+        [cartItems]="cartItemsMap()"
+        (wishlistToggle)="onWishlistToggle($event)"
+        (cartChange)="onCartChange($event)">
+      </app-product-screen>
+
+    } @else {
+      <!-- Default Products View -->
+      <app-banner [slides]="bannerSlides()" [intervalMs]="4000"></app-banner>
+
+      @if (activeFilterCategory()) {
+      <div class="filter-chip-bar">
+        <span class="filter-label">Filtered by:</span>
+        <div class="filter-chip">
+          <span>{{ activeFilterCategory() }}</span>
+          <button class="chip-clear" (click)="clearFilter()" aria-label="Clear filter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <button class="clear-all-btn" (click)="clearFilter()">Clear All</button>
+      </div>
+      }
+
+      <app-product-screen
+        [filterCategory]="activeFilterCategory()"
+        [wishlistIds]="wishlistIds()"
+        [isWishlistMode]="false"
+        [searchQuery]="searchQuery()"
+        [cartItems]="cartItemsMap()"
+        (wishlistToggle)="onWishlistToggle($event)"
+        (cartChange)="onCartChange($event)">
+      </app-product-screen>
     }
 
-    <!-- Featured Products -->
-    <app-product-screen [filterCategory]="activeFilterCategory()"></app-product-screen>
   </div>
 </div>
 

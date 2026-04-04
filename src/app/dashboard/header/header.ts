@@ -34,6 +34,9 @@ export class Header {
   /** Number of items in the cart (badge count) */
   cartCount = input<number>(0);
 
+  /** Number of items in the wishlist (badge count) */
+  wishlistCount = input<number>(0);
+
   /** User profile for the avatar */
   user = input<HeaderUser>({ name: 'User' });
 
@@ -71,6 +74,9 @@ export class Header {
   /** Emitted when the user avatar is clicked */
   avatarClick = output<void>();
 
+  /** Emitted when the wishlist button is clicked */
+  wishlistClick = output<void>();
+
   // ── Methods ──
   onMenuToggle(): void {
     this.menuToggle.emit();
@@ -78,9 +84,7 @@ export class Header {
 
   onSearch(): void {
     const query = this.searchQuery().trim();
-    if (query) {
-      this.searchSubmit.emit(query);
-    }
+    this.searchSubmit.emit(query);
   }
 
   onCartClick(): void {
@@ -89,5 +93,9 @@ export class Header {
 
   onAvatarClick(): void {
     this.avatarClick.emit();
+  }
+
+  onWishlistClick(): void {
+    this.wishlistClick.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Header, HeaderUser, PromoConfig } from '../header/header';
@@ -6,10 +6,11 @@ import { SideNav, CategoryItem } from '../side-nav/side-nav';
 import { Footer } from '../footer/footer';
 import { Banner, BannerSlide } from '../banner/banner';
 import { ProductScreen } from '../product-screen/product-screen';
+import { CartScreen } from '../cart-screen/cart-screen';
 
 @Component({
   selector: 'app-dashoard-screen',
-  imports: [CommonModule, Header, SideNav, Footer, Banner, ProductScreen],
+  imports: [CommonModule, Header, SideNav, Footer, Banner, ProductScreen, CartScreen],
   templateUrl: './dashoard-screen.html',
   styleUrl: './dashoard-screen.scss',
 })
@@ -18,7 +19,6 @@ export class DashoardScreen {
   // ── Header Configuration ──
   brandName = signal('Gromuse');
   searchPlaceholder = signal('Search for Grocery, Stores, Vegetable or Meat');
-  cartCount = signal(9);
   currentUser = signal<HeaderUser>({ name: 'Ajith R' });
   promoConfig = signal<PromoConfig | null>({
     icon: '⚡',
@@ -29,6 +29,10 @@ export class DashoardScreen {
   // ── Side Nav State ──
   sideNavOpen = signal(false);
   activeFilterCategory = signal<string | null>(null);
+
+  // ── Wishlist State ──
+  wishlistIds = signal<string[]>([]);
+  showingWishlist = signal(false);
 
   // ── Categories — derived from product.json ──
   categories = signal<CategoryItem[]>(
@@ -73,6 +77,26 @@ export class DashoardScreen {
     }
   ]);
 
+  // ── Search State ──
+  searchQuery = signal<string | null>(null);
+
+  // ── Cart State ──
+  cartItemsMap = signal<Record<string, number>>({});
+  showingCart = signal(false);
+
+  // ── Computed ──
+  cartCount = computed(() => {
+    return Object.values(this.cartItemsMap()).reduce((sum, qty) => sum + qty, 0);
+  });
+
+  cartItemsData = computed(() => {
+    const allProducts = ProductScreen.loadProducts();
+    const map = this.cartItemsMap();
+    return Object.entries(map).map(([id, qty]) => {
+       return { product: allProducts.find(p => p.id === id)!, quantity: qty };
+    }).filter(x => x.product);
+  });
+
   constructor(private router: Router) { }
 
   // ── Header Event Handlers ──
@@ -82,14 +106,21 @@ export class DashoardScreen {
 
   onSearch(query: string): void {
     console.log('Search query:', query);
+    this.searchQuery.set(query || null);
   }
 
   onCartClick(): void {
-    console.log('Cart clicked');
+    this.showingCart.set(true);
+    this.showingWishlist.set(false);
   }
 
   onAvatarClick(): void {
     console.log('Avatar clicked');
+  }
+
+  onHeaderWishlistClick(): void {
+    this.showingWishlist.set(true);
+    this.showingCart.set(false);
   }
 
   // ── Side Nav Event Handlers ──
@@ -100,6 +131,8 @@ export class DashoardScreen {
     } else {
       this.activeFilterCategory.set(category.name);
     }
+    this.showingWishlist.set(false);
+    this.showingCart.set(false);
     this.sideNavOpen.set(false);
   }
 
@@ -109,5 +142,31 @@ export class DashoardScreen {
 
   clearFilter(): void {
     this.activeFilterCategory.set(null);
+    this.showingWishlist.set(false);
+    this.showingCart.set(false);
+  }
+
+  // ── Product Event Handlers ──
+  onWishlistToggle(product: any): void {
+    const current = this.wishlistIds();
+    if (current.includes(product.id)) {
+      this.wishlistIds.set(current.filter(id => id !== product.id));
+    } else {
+      this.wishlistIds.set([...current, product.id]);
+    }
+  }
+
+  onCartChange(event: {product: any, delta: number}): void {
+    const { product, delta } = event;
+    const current = { ...this.cartItemsMap() };
+    const currentQty = current[product.id] || 0;
+    const newQty = currentQty + delta;
+    
+    if (newQty <= 0) {
+      delete current[product.id];
+    } else {
+      current[product.id] = newQty;
+    }
+    this.cartItemsMap.set(current);
   }
 }

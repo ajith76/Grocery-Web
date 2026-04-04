@@ -300,6 +300,52 @@ $transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+/* ---------- Quantity Control ---------- */
+.quantity-control-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+  background: $accent-light;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(26, 77, 69, 0.1);
+  height: 35px;
+}
+
+.qty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: $accent;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover:not(:disabled):not(.disabled) {
+    background: $accent;
+    color: #fff;
+  }
+
+  &:disabled, &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+}
+
+.qty-text {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
 /* ---------- Animations ---------- */
 @keyframes cardFadeIn {
   0% {

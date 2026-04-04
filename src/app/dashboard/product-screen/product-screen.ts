@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, input } from '@angular/core';
+import { Component, signal, computed, OnInit, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import productData from './product.json';
 
@@ -14,6 +14,7 @@ export interface Product {
   brand: string;
   discount: number;
   bgColor: string;
+  quantity: number;
 }
 
 @Component({
@@ -28,6 +29,25 @@ export class ProductScreen implements OnInit {
   /** Active category filter — null means show all */
   filterCategory = input<string | null>(null);
 
+  /** List of wishlisted product IDs */
+  wishlistIds = input<string[]>([]);
+
+  /** Show only wishlisted products mode */
+  isWishlistMode = input<boolean>(false);
+
+  /** Search query string */
+  searchQuery = input<string | null>(null);
+
+  /** Mapping of product ID to quantity in cart */
+  cartItems = input<Record<string, number>>({});
+
+  // ── Outputs ──
+  /** Emitted when a product wishlist button is toggled */
+  wishlistToggle = output<Product>();
+
+  /** Emitted when a product is added or removed from cart */
+  cartChange = output<{product: Product, delta: number}>();
+
   // ── State ──
   allProducts = signal<Product[]>([]);
   showAll = signal(false);
@@ -35,10 +55,27 @@ export class ProductScreen implements OnInit {
 
   // ── Computed ──
   filteredProducts = computed(() => {
-    const products = this.allProducts();
-    const filter = this.filterCategory();
-    if (!filter) return products;
-    return products.filter(p => p.category === filter);
+    let products = this.allProducts();
+    
+    if (this.isWishlistMode()) {
+      products = products.filter(p => this.wishlistIds().includes(p.id));
+    } else {
+      const filter = this.filterCategory();
+      if (filter) {
+        products = products.filter(p => p.category === filter);
+      }
+    }
+
+    const query = this.searchQuery()?.toLowerCase();
+    if (query) {
+      products = products.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.brand.toLowerCase().includes(query) || 
+        p.category.toLowerCase().includes(query)
+      );
+    }
+
+    return products;
   });
 
   displayedProducts = computed(() => {
@@ -111,12 +148,13 @@ export class ProductScreen implements OnInit {
     this.showAll.update(v => !v);
   }
 
-  onAddToCart(product: Product): void {
-    console.log('Added to cart:', product.name);
+  updateCart(product: Product, delta: number): void {
+    this.cartChange.emit({ product, delta });
   }
 
   onWishlist(product: Product): void {
     console.log('Wishlist toggled:', product.name);
+    this.wishlistToggle.emit(product);
   }
 
   getStars(rating: number): number[] {
