@@ -1,21 +1,7 @@
-import { Component, signal, computed, OnInit, input, output } from '@angular/core';
+import { Component, signal, computed, OnInit, input, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import productData from './product.json';
-
-export interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  originalPrice: number;
-  weight: string;
-  rating: number;
-  reviews: number;
-  brand: string;
-  discount: number;
-  bgColor: string;
-  quantity: number;
-}
+import { Product } from '../../models/product.model';
+import { ApiService } from '../../api/api-service';
 
 @Component({
   selector: 'app-product-screen',
@@ -24,6 +10,7 @@ export interface Product {
   styleUrl: './product-screen.scss',
 })
 export class ProductScreen implements OnInit {
+  private apiService = inject(ApiService);
 
   // ── Inputs ──
   /** Active category filters — empty means show all */
@@ -58,7 +45,7 @@ export class ProductScreen implements OnInit {
     let products = this.allProducts();
     
     if (this.isWishlistMode()) {
-      products = products.filter(p => this.wishlistIds().includes(p.id));
+      products = products.filter(p => this.wishlistIds().includes(p.product_code));
     } else {
       const filters = this.filterCategories();
       if (filters.length > 0) {
@@ -136,12 +123,20 @@ export class ProductScreen implements OnInit {
     }));
   }
 
-  static loadProducts(): Product[] {
-    return productData.featured as Product[];
-  }
-
   ngOnInit(): void {
-    this.allProducts.set(ProductScreen.loadProducts());
+    this.apiService.getProducts().subscribe({
+      next: (products) => {
+        // If the API returns products wrapped in a 'featured' property, handle it
+        const data = Array.isArray(products) ? products : (products as any).featured;
+        if (data) {
+          this.allProducts.set(data);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load products from API:', err);
+        // Fallback or error handled locally if needed
+      }
+    });
   }
 
   toggleSeeAll(): void {

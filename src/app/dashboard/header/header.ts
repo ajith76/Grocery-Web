@@ -1,4 +1,4 @@
-import { Component, input, signal, output, computed } from '@angular/core';
+import { Component, input, signal, output, computed, HostListener, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,6 +23,8 @@ export interface PromoConfig {
   styleUrl: './header.scss',
 })
 export class Header {
+  private elementRef = inject(ElementRef);
+
 
   // ── Configurable Inputs ──
   /** Brand/logo name displayed in the header */
@@ -52,6 +54,8 @@ export class Header {
 
   // ── Internal State ──
   searchQuery = signal('');
+  isDropdownOpen = signal(false);
+
 
   // ── Computed ──
   avatarUrl = computed(() => {
@@ -77,6 +81,13 @@ export class Header {
   /** Emitted when the wishlist button is clicked */
   wishlistClick = output<void>();
 
+  /** Emitted when the logout option is selected */
+  logout = output<void>();
+
+  /** Emitted when the profile option is selected */
+  profileClick = output<void>();
+
+
   // ── Methods ──
   onMenuToggle(): void {
     this.menuToggle.emit();
@@ -93,8 +104,28 @@ export class Header {
   }
 
   onAvatarClick(): void {
+    this.isDropdownOpen.update(v => !v);
     this.avatarClick.emit();
   }
+
+  onLogout(): void {
+    this.logout.emit();
+    this.isDropdownOpen.set(false);
+  }
+
+  onProfileClick(): void {
+    this.profileClick.emit();
+    this.isDropdownOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isDropdownOpen.set(false);
+    }
+  }
+
 
   onWishlistClick(): void {
     this.wishlistClick.emit();

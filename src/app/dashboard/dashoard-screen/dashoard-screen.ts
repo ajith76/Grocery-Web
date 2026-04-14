@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Header, HeaderUser, PromoConfig } from '../header/header';
@@ -7,14 +7,19 @@ import { Footer } from '../footer/footer';
 import { Banner, BannerSlide } from '../banner/banner';
 import { ProductScreen } from '../product-screen/product-screen';
 import { CartScreen } from '../cart-screen/cart-screen';
+import { ProfileDetails } from '../profile-details/profile-details';
+import { ApiService } from '../../api/api-service';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-dashoard-screen',
-  imports: [CommonModule, Header, SideNav, Footer, Banner, ProductScreen, CartScreen],
+  imports: [CommonModule, Header, SideNav, Footer, Banner, ProductScreen, CartScreen, ProfileDetails],
   templateUrl: './dashoard-screen.html',
   styleUrl: './dashoard-screen.scss',
 })
-export class DashoardScreen {
+export class DashoardScreen implements OnInit {
+  private apiService = inject(ApiService);
+  allProducts = signal<Product[]>([]);
 
   // ── Header Configuration ──
   brandName = signal('Gromuse');
@@ -34,16 +39,21 @@ export class DashoardScreen {
   wishlistIds = signal<string[]>([]);
   showingWishlist = signal(false);
 
-  // ── Categories — derived from product.json ──
-  categories = signal<CategoryItem[]>(
-    ProductScreen.getCategories(ProductScreen.loadProducts()).map(c => ({
+  // ── Profile State ──
+  showingProfile = signal(false);
+
+
+  // ── Categories — derived from products ──
+  categories = computed<CategoryItem[]>(() => {
+    const products = this.allProducts();
+    return ProductScreen.getCategories(products).map(c => ({
       id: c.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
       name: c.name,
       icon: c.icon,
       itemCount: c.count,
       color: (c as any).color || '#1a4d45'
-    }))
-  );
+    }));
+  });
 
   // ── Banner Slides ──
   bannerSlides = signal<BannerSlide[]>([
@@ -90,12 +100,24 @@ export class DashoardScreen {
   });
 
   cartItemsData = computed(() => {
-    const allProducts = ProductScreen.loadProducts();
+    const allProducts = this.allProducts();
     const map = this.cartItemsMap();
-    return Object.entries(map).map(([id, qty]) => {
-       return { product: allProducts.find(p => p.id === id)!, quantity: qty };
+    return Object.entries(map).map(([code, qty]) => {
+       return { product: allProducts.find(p => p.product_code === code)!, quantity: qty };
     }).filter(x => x.product);
   });
+
+  ngOnInit(): void {
+    this.apiService.getProducts().subscribe({
+      next: (products) => {
+        const data = Array.isArray(products) ? products : (products as any).featured;
+        if (data) {
+          this.allProducts.set(data);
+        }
+      },
+      error: (err) => console.error('Failed to load products:', err)
+    });
+  }
 
   constructor(private router: Router) { }
 
@@ -112,7 +134,16 @@ export class DashoardScreen {
   onCartClick(): void {
     this.showingCart.set(true);
     this.showingWishlist.set(false);
+    this.showingProfile.set(false);
   }
+
+  onProfileClick(): void {
+    this.showingProfile.set(true);
+    this.showingCart.set(false);
+    this.showingWishlist.set(false);
+    this.sideNavOpen.set(false);
+  }
+
 
   onAvatarClick(): void {
     console.log('Avatar clicked');
@@ -121,7 +152,9 @@ export class DashoardScreen {
   onHeaderWishlistClick(): void {
     this.showingWishlist.set(true);
     this.showingCart.set(false);
+    this.showingProfile.set(false);
   }
+
 
   // ── Side Nav Event Handlers ──
   onCategorySelect(category: CategoryItem): void {
@@ -133,8 +166,10 @@ export class DashoardScreen {
     }
     this.showingWishlist.set(false);
     this.showingCart.set(false);
+    this.showingProfile.set(false);
     this.sideNavOpen.set(false);
   }
+
 
   removeCategoryFilter(categoryName: string): void {
     const current = this.activeFilterCategories();
@@ -149,28 +184,30 @@ export class DashoardScreen {
     this.activeFilterCategories.set([]);
     this.showingWishlist.set(false);
     this.showingCart.set(false);
+    this.showingProfile.set(false);
   }
 
+
   // ── Product Event Handlers ──
-  onWishlistToggle(product: any): void {
+  onWishlistToggle(product: Product): void {
     const current = this.wishlistIds();
-    if (current.includes(product.id)) {
-      this.wishlistIds.set(current.filter(id => id !== product.id));
+    if (current.includes(product.product_code)) {
+      this.wishlistIds.set(current.filter(code => code !== product.product_code));
     } else {
-      this.wishlistIds.set([...current, product.id]);
+      this.wishlistIds.set([...current, product.product_code]);
     }
   }
 
-  onCartChange(event: {product: any, delta: number}): void {
+  onCartChange(event: {product: Product, delta: number}): void {
     const { product, delta } = event;
     const current = { ...this.cartItemsMap() };
-    const currentQty = current[product.id] || 0;
+    const currentQty = current[product.product_code] || 0;
     const newQty = currentQty + delta;
     
     if (newQty <= 0) {
-      delete current[product.id];
+      delete current[product.product_code];
     } else {
-      current[product.id] = newQty;
+      current[product.product_code] = newQty;
     }
     this.cartItemsMap.set(current);
   }

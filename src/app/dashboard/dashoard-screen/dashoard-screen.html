@@ -10,7 +10,8 @@
   (searchSubmit)="onSearch($event)"
   (cartClick)="onCartClick()"
   (wishlistClick)="onHeaderWishlistClick()"
-  (avatarClick)="onAvatarClick()">
+  (avatarClick)="onAvatarClick()"
+  (profileClick)="onProfileClick()">
 </app-header>
 
 <app-side-nav
@@ -51,6 +52,17 @@
         (wishlistToggle)="onWishlistToggle($event)"
         (cartChange)="onCartChange($event)">
       </app-product-screen>
+
+    } @else if (showingProfile()) {
+      <!-- Profile View -->
+      <div class="filter-chip-bar" style="margin-bottom: 20px;">
+        <span class="filter-label">Profile Settings</span>
+        <button class="clear-all-btn" (click)="showingProfile.set(false)">Back to Shopping</button>
+      </div>
+      <app-profile-details
+        [user]="currentUser()"
+        (close)="showingProfile.set(false)">
+      </app-profile-details>
 
     } @else {
       <!-- Default Products View -->
